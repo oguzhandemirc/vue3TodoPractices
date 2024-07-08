@@ -14,7 +14,6 @@
         >
           Ekle
         </button>
-        <!-- <button class="text-right" @click="save()">kaydet</button> -->
       </div>
       <!-- Sağ Taraf -->
       <div class="w-1/2">
@@ -51,10 +50,7 @@
 </style>
 
 <script setup>
-import { ref } from "vue";
-// import { useStorage } from "@vueuse/core";
-
-// const state = useStorage("id", { text: "hi", done: "Hello" }); // Local Storage
+import { ref, onMounted } from "vue";
 
 const list = ref([]);
 
@@ -67,20 +63,28 @@ const addTodo = () => {
   }
   newTodo.value = "";
   newTodo.focus();
-  console.log(list.value);
+  // console.log(list.value);
   localStorage.setItem("my-items", JSON.stringify(list.value));
 };
 
 const done = (index) => {
   list.value[index].done = !list.value[index].done;
-  console.log(list.value);
+  // console.log(list.value);
+  localStorage.setItem("my-items", JSON.stringify(list.value));
+  console.log(localStorage.getItem("my-items"));
 };
 
 const deleteTodo = (index) => {
   list.value.splice(index, 1);
-  console.log(list.value);
+  // console.log(list.value);
+  localStorage.setItem("my-items", JSON.stringify(list.value));
+  console.log(localStorage.getItem("my-items"));
 };
 
-
-
+onMounted(() => {
+  const items = localStorage.getItem("my-items");
+  if (items) {
+    list.value = JSON.parse(items);
+  }
+});
 </script>
